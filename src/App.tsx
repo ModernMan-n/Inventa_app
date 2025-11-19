@@ -16,7 +16,7 @@ function App() {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [status, setStatus] = useState<string>("Файл ещё не загружен");
   const [isFontModalOpen, setIsFontModalOpen] = useState(false);
-  const [paperSize, setPaperSize] = useState("A4");
+  const [paperSize, setPaperSize] = useState<PaperKey>("A4");
   const [customWidth, setCustomWidth] = useState(100); // мм
   const [customHeight, setCustomHeight] = useState(150); // мм
   const PAPER_SIZES = {
@@ -27,7 +27,9 @@ function App() {
   L100x150: { w: 100, h: 150 },
   L60x30: { w: 60, h: 30 },
   CUSTOM: { w: 0, h: 0 },
-};
+} as const;
+type PaperKey = keyof typeof PAPER_SIZES;
+
 
   const handleFileChange = (file: File) => {
     setIsProcessing(true);
@@ -58,47 +60,6 @@ function App() {
         { width: 42 },
         { width: 42 },
       ];
-      // =================
-// Размер бумаги
-// =================
-
-// выбираем размер
-let widthMM, heightMM;
-
-if (paperSize === "CUSTOM") {
-  widthMM = customWidth;
-  heightMM = customHeight;
-} else {
-  widthMM = PAPER_SIZES[paperSize].w;
-  heightMM = PAPER_SIZES[paperSize].h;
-}
-
-// мм → дюймы
-const mmToInch = (mm: number) => mm / 25.4;
-
-// выбираем ориентацию по соотношению сторон,
-// но реальный размер бумаги уже выбирается в принтере
-ws.pageSetup = {
-  orientation:
-    paperSize === "CUSTOM"
-      ? customWidth > customHeight
-        ? "landscape"
-        : "portrait"
-      : PAPER_SIZES[paperSize].w > PAPER_SIZES[paperSize].h
-      ? "landscape"
-      : "portrait",
-  fitToWidth: 1,
-  fitToHeight: 0,
-  margins: {
-    left: 0.25,
-    right: 0.25,
-    top: 0.25,
-    bottom: 0.25,
-    header: 0.1,
-    footer: 0.1,
-  },
-};
-
       // Заполняем данными
       labelsAoA.forEach((row, rowIndex) => {
         const excelRow = ws.getRow(rowIndex + 1);
@@ -115,7 +76,6 @@ ws.pageSetup = {
         // каждая этикетка = 3 строки
         for (let r = 0; r < totalRows; r += 3) {
           const top = r + 1;          // 1-я строка этикетки (наименование)
-          const invRow = r + 2;       // 2-я строка (инв. номер — текст)
           const barcodeRow = r + 3;   // 3-я строка (штрих-код)
           const leftCol = 1;
           const rightCol = 2;
@@ -257,7 +217,7 @@ ws.pageSetup = {
 
   <select
     value={paperSize}
-    onChange={(e) => setPaperSize(e.target.value)}
+    onChange={(e) => setPaperSize(e.target.value as PaperKey)}
   >
     <option value="A4">A4 (210×297 мм)</option>
     <option value="A5">A5 (148×210 мм)</option>
