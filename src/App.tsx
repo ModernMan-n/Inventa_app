@@ -3,6 +3,10 @@ import * as XLSX from "xlsx";
 import "./App.css";
 import ExcelJS from "exceljs";
 import JsBarcode from "jsbarcode";
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/main
 
 type InputRow = {
   N?: number;
@@ -18,10 +22,59 @@ function makeCode128(value: string) {
     margin: 0,
   });
   const dataUrl = canvas.toDataURL("image/png");
+<<<<<<< HEAD
   // откусываем префикс "data:image/png;base64,"
   return dataUrl.split(",")[1];
 }
+=======
+  return dataUrl.split(",")[1];
+}
+function buildLabelsTwoColumns(rows: InputRow[]): (string | null)[][] {
+  const items: { name: string; inv: string }[] = [];
+>>>>>>> origin/main
 
+  for (const row of rows) {
+    const name = String(row["Основное средство"] ?? "").trim();
+    const invRaw = row["Инвентарный номер"];
+    const inv = String(invRaw ?? "").trim();
+
+    if (!name || !inv) continue;
+
+    const qty = 1; // если потом добавишь "Количество" — тут можно учитывать
+
+    for (let i = 0; i < qty; i++) {
+      items.push({ name, inv });
+    }
+  }
+
+  const result: (string | null)[][] = [];
+
+  // каждая этикетка = 3 строки, раскладка в два столбца
+  for (let i = 0; i < items.length; i += 2) {
+    const left = items[i];
+    const right = items[i + 1];
+
+    // 1 строка — наименование
+    result.push([
+      left?.name ?? null,
+      right?.name ?? null,
+    ]);
+
+    // 2 строка — инв. номер текстом
+    result.push([
+      left ? `инв. №${left.inv}` : null,
+      right ? `инв. №${right.inv}` : null,
+    ]);
+
+    // 3 строка — тут храним "сырой" инв. номер для генерации картинки
+    result.push([
+      left?.inv ?? null,
+      right?.inv ?? null,
+    ]);
+  }
+
+  return result;
+}
 function App() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -65,6 +118,7 @@ function App() {
           // 2. Генерируем массив этикеток (3 строки × 2 столбца)
           const labelsAoA = buildLabelsTwoColumns(rows);
 
+<<<<<<< HEAD
           // 3. Создаём новый Excel-файл через ExcelJS
           const wb = new ExcelJS.Workbook();
           const ws = wb.addWorksheet("Этикетки");
@@ -155,6 +209,84 @@ function App() {
                 }
               }
             }
+=======
+      // 3. Создаём новый Excel-файл через ExcelJS
+      const wb = new ExcelJS.Workbook();
+      const ws = wb.addWorksheet("Этикетки");
+      ws.columns = [
+        { width: 42 },
+        { width: 42 },
+      ];
+      // Заполняем данными
+      labelsAoA.forEach((row, rowIndex) => {
+  const excelRow = ws.getRow(rowIndex + 1);
+  row.forEach((value, colIndex) => {
+    if (value != null) {
+      excelRow.getCell(colIndex + 1).value = value;
+    }
+  });
+});
+
+      // 4. Стили: пунктирные рамки + шрифт Code128 24pt для строки штрих-кода
+      // 4. Пунктирные рамки + вставка PNG-штрихкода
+const totalRows = labelsAoA.length;
+
+if (totalRows > 0) {
+  // каждая этикетка = 3 строки
+  for (let r = 0; r < totalRows; r += 3) {
+    const top = r + 1;        // 1-я строка этикетки (наименование)
+    const invRow = r + 2;     // 2-я строка (инв. номер текстом)
+    const barcodeRow = r + 3; // 3-я строка (штрих-код-картинка)
+    const leftCol = 1;
+    const rightCol = 2;
+
+    for (let rr = top; rr <= barcodeRow; rr++) {
+      for (let cc = leftCol; cc <= rightCol; cc++) {
+        const cell = ws.getRow(rr).getCell(cc);
+
+        // Пунктирная рамка вокруг блока этикетки
+        const border = cell.border || {};
+        if (rr === top) {
+          border.top = { style: "dotted", color: { argb: "FF999999" } };
+        }
+        if (rr === barcodeRow) {
+          border.bottom = { style: "dotted", color: { argb: "FF999999" } };
+        }
+        if (cc === leftCol) {
+          border.left = { style: "dotted", color: { argb: "FF999999" } };
+        }
+        if (cc === rightCol) {
+          border.right = { style: "dotted", color: { argb: "FF999999" } };
+        }
+        cell.border = border;
+
+        // На строке штрих-кода вставляем PNG вместо текста
+        if (rr === barcodeRow) {
+          const rawValue = cell.value;
+          const inv =
+            typeof rawValue === "number"
+              ? String(rawValue)
+              : typeof rawValue === "string"
+              ? rawValue.trim()
+              : "";
+
+          if (inv) {
+            // Генерируем картинку Code128
+            const base64 = makeCode128(inv.replace(/\s/g, ""));
+            const imageId = wb.addImage({
+              base64,
+              extension: "png",
+            });
+
+            // ExcelJS использует 0-базный индекс строк/столбцов
+            ws.addImage(imageId, {
+              tl: { col: cc - 1 + 0.1, row: rr - 1 + 0.1 },
+              br: { col: cc - 1 + 0.9, row: rr - 1 + 0.9 },
+            });
+
+            // Текст можно очистить, чтобы не торчал под картинкой
+            cell.value = null;
+>>>>>>> origin/main
           }
 
           const buffer = await wb.xlsx.writeBuffer();
@@ -177,8 +309,39 @@ function App() {
         } finally {
           setIsProcessing(false);
         }
+<<<<<<< HEAD
       })();
     };
+=======
+      }
+    }
+  }
+}
+
+      const buffer = await wb.xlsx.writeBuffer();
+
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      if (downloadUrl) {
+        URL.revokeObjectURL(downloadUrl);
+      }
+
+      const url = URL.createObjectURL(blob);
+      setDownloadUrl(url);
+      setStatus("Файл сформирован. Можно скачивать ✅");
+    } catch (err) {
+      console.error(err);
+      setStatus("Ошибка обработки файла. Проверь формат Excel.");
+      setDownloadUrl(null);
+    } finally {
+      setIsProcessing(false);
+    }
+  })();
+};
+
+>>>>>>> origin/main
 
     reader.onerror = () => {
       setStatus("Ошибка чтения файла");
@@ -372,6 +535,7 @@ function App() {
   );
 }
 
+<<<<<<< HEAD
 function buildLabelsTwoColumns(rows: InputRow[]): (string | null)[][] {
   const items: { name: string; inv: string }[] = [];
 
@@ -412,4 +576,6 @@ function buildLabelsTwoColumns(rows: InputRow[]): (string | null)[][] {
   return result;
 }
 
+=======
+>>>>>>> origin/main
 export default App;
