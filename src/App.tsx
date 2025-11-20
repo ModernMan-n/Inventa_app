@@ -105,7 +105,7 @@ function App() {
           // 3. Создаём новый Excel-файл через ExcelJS
           const wb = new ExcelJS.Workbook();
           const ws = wb.addWorksheet("Этикетки");
-          ws.columns = [{ width: 42 }, { width: 42 }];
+          ws.columns = [{ width: 25 }, { width: 25 }];
           // Заполняем данными
           labelsAoA.forEach((row, rowIndex) => {
             const excelRow = ws.getRow(rowIndex + 1);
