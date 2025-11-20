@@ -324,4 +324,5 @@ html,
 .custom-size input {
   width: 80px;
   padding: 4px 6px;
+  max-width: 80px;
 }
