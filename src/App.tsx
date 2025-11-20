@@ -170,17 +170,19 @@ function App() {
                         : "";
 
                     if (inv) {
-                      // Генерируем картинку Code128
+                      // Установка увеличенной высоты строки для штрих-кода (строка №3 блока)
+                      ws.getRow(barcodeRow).height = 60;
+
                       const base64 = makeCode128(inv.replace(/\s/g, ""));
                       const imageId = wb.addImage({
                         base64,
                         extension: "png",
                       });
 
-                      // ExcelJS использует 0-базный индекс строк/столбцов
+                      // уменьшенная ширина и фиксированная высота
                       ws.addImage(imageId, {
-                        tl: { col: cc - 1, row: rr - 1 },
-                        ext: { width: 200, height: 60 },
+                        tl: { col: cc - 1 + 0.15, row: rr - 1 + 0.15 }, // небольшие отступы
+                        ext: { width: 150, height: 45 }, // ★ уменьшили размер картинки
                       } as any);
 
                       // Текст можно очистить, чтобы не торчал под картинкой
