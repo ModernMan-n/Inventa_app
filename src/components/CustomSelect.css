@@ -1,0 +1,62 @@
+.cs-wrapper {
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+  font-family: inherit;
+}
+
+.cs-label {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #3a3a3a;
+  font-weight: 500;
+}
+
+.cs-selected {
+  background: white;
+  border: 2px solid #d0d7e2;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cs-selected:hover {
+  border-color: #4d8eff;
+}
+
+.cs-arrow {
+  opacity: 0.6;
+  font-size: 12px;
+}
+
+.cs-options {
+  position: absolute;
+  width: 100%;
+  background: white;
+  border: 2px solid #d0d7e2;
+  border-radius: 10px;
+  margin-top: 5px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 200;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cs-option {
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.cs-option:hover {
+  background: #e6f0ff;
+}
+
+.cs-option.selected {
+  background: #d8e8ff;
+  font-weight: 600;
+}
