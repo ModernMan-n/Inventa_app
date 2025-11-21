@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import "./CustomSelect.css";
 
 export default function CustomSelect({
-  label,
   value,
   options,
   onChange,
