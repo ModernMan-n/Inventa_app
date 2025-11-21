@@ -1,12 +1,13 @@
 .cs-wrapper {
   width: 100%;
+  max-width: 50%;
   margin-bottom: 20px;
   position: relative;
   font-family: inherit;
 }
 
 .cs-label {
-  margin-bottom: 6px;
+  margin-bottom: 10px;
   font-size: 14px;
   color: #3a3a3a;
   font-weight: 500;

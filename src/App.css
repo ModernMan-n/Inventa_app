@@ -339,3 +339,6 @@ html,
     border-bottom: 2px solid #1a6dff;
     padding: 10px;
 }
+.mappingField>span{
+  width:50%;
+}

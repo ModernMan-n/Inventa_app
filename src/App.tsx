@@ -358,13 +358,7 @@ function App() {
     a.click();
   };
 
-  const handleDownloadFont = () => {
-    const a = document.createElement("a");
-    a.href = "/code128.ttf";
-    a.download = "Code128.ttf";
-    a.click();
-    setIsFontModalOpen(true);
-  };
+  
 
   const handleConfirmMapping = () => {
     if (!rowsBuffer) return;
@@ -479,19 +473,7 @@ function App() {
 
             <p className="status-text">{status}</p>
 
-            <div className="font-hint">
-              <span>
-                Для корректного отображения штрих-кодов в Excel установите
-                шрифт{" "}
-              </span>
-              <button
-                type="button"
-                className="link-btn"
-                onClick={handleDownloadFont}
-              >
-                Code128
-              </button>
-            </div>
+            
           </div>
 
           <div className="hero-visual">
