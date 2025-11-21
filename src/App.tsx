@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import CustomSelect from "./components/CustomSelect";
 import { useLabels } from "./hooks/useLabels";
-import { PaperKey } from "./utils/labels";
+import type { PaperKey } from "./utils/labels";
 // ===================== ОСНОВНОЙ КОМПОНЕНТ =====================
 
 function App() {

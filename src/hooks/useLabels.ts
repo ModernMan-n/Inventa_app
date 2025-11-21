@@ -2,13 +2,8 @@ import { useCallback, useState } from "react";
 import * as XLSX from "xlsx";
 import ExcelJS from "exceljs";
 import { makeCode128 } from "../utils/barcode";
-import {
-  PAPER_SIZES,
-  PaperKey,
-  buildLabelsTwoColumns,
-  ColumnMapping,
-  InputRow,
-} from "../utils/labels";
+import { PAPER_SIZES, buildLabelsTwoColumns } from "../utils/labels";
+import type { PaperKey, ColumnMapping, InputRow } from "../utils/labels";
 
 export function useLabels() {
   const [isProcessing, setIsProcessing] = useState(false);
