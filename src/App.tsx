@@ -2,7 +2,6 @@ import { useState } from "react";
 import "./App.css";
 import CustomSelect from "./components/CustomSelect";
 import { useLabels } from "./hooks/useLabels";
-import type { PaperKey } from "./utils/labels";
 // ===================== ОСНОВНОЙ КОМПОНЕНТ =====================
 
 function App() {
@@ -17,14 +16,8 @@ function App() {
       availableColumns,
       rowsBuffer,
       mappingDraft,
-      paperSize,
-      customWidth,
-      customHeight,
     },
     actions: {
-      setPaperSize,
-      setCustomWidth,
-      setCustomHeight,
       setMappingDraft,
       setIsMappingModalOpen,
       onUploadClick,
