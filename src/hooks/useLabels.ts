@@ -91,7 +91,7 @@ export function useLabels() {
             const leftCol = 1;
             const rightCol = 2;
 
-            ws.getRow(barcodeRow).height = 60;
+            ws.getRow(barcodeRow).height = 45;
 
             for (let rr = top; rr <= barcodeRow; rr++) {
               for (let cc = leftCol; cc <= rightCol; cc++) {
@@ -138,7 +138,7 @@ export function useLabels() {
                     });
 
                     ws.addImage(imageId, {
-                      tl: { col: cc - 1 + 0.15, row: rr - 1 + 0.15 },
+                      tl: { col: cc - 1 + 0.35, row: rr - 1 + 0.35 },
                       ext: { width: 150, height: 45 },
                     } as any);
 
