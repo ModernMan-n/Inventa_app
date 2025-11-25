@@ -77,8 +77,8 @@ export function useLabels() {
             };
 
             cell.font = {
-              name: "Arial",
-              size: 9, // уменьшаем шрифт
+              name: "Calibri",
+              size: 8,
             };
           });
         });
@@ -91,7 +91,7 @@ export function useLabels() {
             const leftCol = 1;
             const rightCol = 2;
 
-            ws.getRow(barcodeRow).height = 40;
+            ws.getRow(barcodeRow).height = 35;
 
             for (let rr = top; rr <= barcodeRow; rr++) {
               for (let cc = leftCol; cc <= rightCol; cc++) {
