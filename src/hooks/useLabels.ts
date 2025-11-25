@@ -64,9 +64,22 @@ export function useLabels() {
         labelsAoA.forEach((row, rowIndex) => {
           const excelRow = ws.getRow(rowIndex + 1);
           row.forEach((value, colIndex) => {
+            const cell = excelRow.getCell(colIndex + 1);
+
             if (value != null) {
-              excelRow.getCell(colIndex + 1).value = value;
+              cell.value = value;
             }
+
+            cell.alignment = {
+              wrapText: true,
+              horizontal: "center",
+              vertical: "middle",
+            };
+
+            cell.font = {
+              name: "Arial",
+              size: 9, // уменьшаем шрифт
+            };
           });
         });
 
@@ -89,13 +102,22 @@ export function useLabels() {
                   border.top = { style: "dotted", color: { argb: "FF999999" } };
                 }
                 if (rr === barcodeRow) {
-                  border.bottom = { style: "dotted", color: { argb: "FF999999" } };
+                  border.bottom = {
+                    style: "dotted",
+                    color: { argb: "FF999999" },
+                  };
                 }
                 if (cc === leftCol) {
-                  border.left = { style: "dotted", color: { argb: "FF999999" } };
+                  border.left = {
+                    style: "dotted",
+                    color: { argb: "FF999999" },
+                  };
                 }
                 if (cc === rightCol) {
-                  border.right = { style: "dotted", color: { argb: "FF999999" } };
+                  border.right = {
+                    style: "dotted",
+                    color: { argb: "FF999999" },
+                  };
                 }
                 cell.border = border;
 
@@ -115,13 +137,10 @@ export function useLabels() {
                       extension: "png",
                     });
 
-                    ws.addImage(
-                      imageId,
-                      {
-                        tl: { col: cc - 1 + 0.15, row: rr - 1 + 0.15 },
-                        ext: { width: 150, height: 45 },
-                      } as any
-                    );
+                    ws.addImage(imageId, {
+                      tl: { col: cc - 1 + 0.15, row: rr - 1 + 0.15 },
+                      ext: { width: 150, height: 45 },
+                    } as any);
 
                     cell.value = null;
                   }
@@ -162,7 +181,9 @@ export function useLabels() {
 
     reader.onload = (e) => {
       try {
-        const data = new Uint8Array((e.target as FileReader).result as ArrayBuffer);
+        const data = new Uint8Array(
+          (e.target as FileReader).result as ArrayBuffer
+        );
         const workbookIn = XLSX.read(data, { type: "array" });
         const sheetName = workbookIn.SheetNames[0];
         const sheet = workbookIn.Sheets[sheetName];
@@ -217,7 +238,10 @@ export function useLabels() {
             columns[
               lower.findIndex(
                 (c) =>
-                  c === "n" || c === "№" || c.includes("пози") || c.includes("номер")
+                  c === "n" ||
+                  c === "№" ||
+                  c.includes("пози") ||
+                  c.includes("номер")
               )
             ] || "",
         });
@@ -265,7 +289,11 @@ export function useLabels() {
   const handleConfirmMapping = useCallback(() => {
     if (!rowsBuffer) return;
 
-    if (!mappingDraft.name || !mappingDraft.inventory || !mappingDraft.position) {
+    if (
+      !mappingDraft.name ||
+      !mappingDraft.inventory ||
+      !mappingDraft.position
+    ) {
       setStatus("Нужно сопоставить все три обязательных поля.");
       return;
     }
