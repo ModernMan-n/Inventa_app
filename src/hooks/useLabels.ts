@@ -35,7 +35,7 @@ export function useLabels() {
         const wb = new ExcelJS.Workbook();
         const ws = wb.addWorksheet("Этикетки");
 
-        const colWidth = 25;
+        const colWidth = 22;
         ws.columns = [{ width: colWidth }, { width: colWidth }];
 
         const isCustom = paperSize === "CUSTOM";
@@ -139,7 +139,7 @@ export function useLabels() {
 
                     ws.addImage(imageId, {
                       tl: { col: cc - 1 + 0.55, row: rr - 1 },
-                      ext: { width: 150, height: 45 },
+                      ext: { width: 130, height: 35 },
                     } as any);
 
                     cell.value = null;

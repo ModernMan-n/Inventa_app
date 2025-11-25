@@ -6,7 +6,6 @@ import type { PaperKey } from "./utils/labels";
 // ===================== ОСНОВНОЙ КОМПОНЕНТ =====================
 
 function App() {
-  
   const [isFontModalOpen, setIsFontModalOpen] = useState(false);
   // ===================== JSX =====================
   const {
@@ -60,53 +59,10 @@ function App() {
             <p className="eyebrow">ИНВЕНТАРИЗАЦИЯ БЕЗ БОЛИ</p>
             <h1 className="hero-title">Генератор этикеток</h1>
             <p className="hero-subtitle">
-              Загрузите Excel с объектами — получите готовый файл с этикетками
-              и штрих-кодами. Печатаете, клеите, сканируете — инвентарный номер
+              Загрузите Excel с объектами — получите готовый файл с этикетками и
+              штрих-кодами. Печатаете, клеите, сканируете — инвентарный номер
               вводится автоматически.
             </p>
-
-            <div className="paper-setup">
-              <label>Размер листа:</label>
-
-              <select
-                value={paperSize}
-                onChange={(e) => setPaperSize(e.target.value as PaperKey)}
-              >
-                <option value="A4">A4 (210×297 мм)</option>
-                <option value="A5">A5 (148×210 мм)</option>
-                <option value="A6">A6 (105×148 мм)</option>
-                <option value="LETTER">Letter (216×279 мм)</option>
-                <option value="L100x150">Label 100×150 мм</option>
-                <option value="L60x30">Label 60×30 мм</option>
-                <option value="CUSTOM">Custom…</option>
-              </select>
-
-              {paperSize === "CUSTOM" && (
-                <div className="custom-size">
-                  <label>
-                    Ширина (мм):
-                    <input
-                      type="number"
-                      value={customWidth}
-                      onChange={(e) =>
-                        setCustomWidth(Number(e.target.value || 0))
-                      }
-                    />
-                  </label>
-
-                  <label>
-                    Высота (мм):
-                    <input
-                      type="number"
-                      value={customHeight}
-                      onChange={(e) =>
-                        setCustomHeight(Number(e.target.value || 0))
-                      }
-                    />
-                  </label>
-                </div>
-              )}
-            </div>
 
             <div className="hero-buttons">
               <button
@@ -127,8 +83,6 @@ function App() {
             </div>
 
             <p className="status-text">{status}</p>
-
-            
           </div>
 
           <div className="hero-visual">
@@ -136,9 +90,7 @@ function App() {
               <p className="hero-card-title">Превью этикетки</p>
               <div className="label-preview">
                 <div className="label-line">Основное средство</div>
-                <div className="label-line label-inv">
-                  инв. №410134001558
-                </div>
+                <div className="label-line label-inv">инв. №410134001558</div>
                 <div className="label-barcode">▌▌▍▍▌▍▌▌▍▌▍▍▌▌▍</div>
               </div>
               <p className="hero-card-caption">
@@ -167,37 +119,37 @@ function App() {
               <label className="mappingField">
                 <span>Инвентарный номер *</span>
                 <CustomSelect
-  label="Инвентарный номер *"
-  value={mappingDraft.inventory}
-  options={availableColumns}
-  onChange={(v) =>
-    setMappingDraft((prev) => ({ ...prev, inventory: v }))
-  }
-/>
+                  label="Инвентарный номер *"
+                  value={mappingDraft.inventory}
+                  options={availableColumns}
+                  onChange={(v) =>
+                    setMappingDraft((prev) => ({ ...prev, inventory: v }))
+                  }
+                />
               </label>
 
               <label className="mappingField">
                 <span>Наименование ОС *</span>
                 <CustomSelect
-  label="Наименование ОС *"
-  value={mappingDraft.name}
-  options={availableColumns}
-  onChange={(v) =>
-    setMappingDraft((prev) => ({ ...prev, name: v }))
-  }
-/>
+                  label="Наименование ОС *"
+                  value={mappingDraft.name}
+                  options={availableColumns}
+                  onChange={(v) =>
+                    setMappingDraft((prev) => ({ ...prev, name: v }))
+                  }
+                />
               </label>
 
               <label className="mappingField">
                 <span>Номер позиции (№) *</span>
                 <CustomSelect
-  label="Номер позиции *"
-  value={mappingDraft.position}
-  options={availableColumns}
-  onChange={(v) =>
-    setMappingDraft((prev) => ({ ...prev, position: v }))
-  }
-/>
+                  label="Номер позиции *"
+                  value={mappingDraft.position}
+                  options={availableColumns}
+                  onChange={(v) =>
+                    setMappingDraft((prev) => ({ ...prev, position: v }))
+                  }
+                />
               </label>
             </div>
 
