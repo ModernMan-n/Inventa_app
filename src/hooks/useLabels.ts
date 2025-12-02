@@ -87,6 +87,7 @@ export function useLabels() {
         if (totalRows > 0) {
           for (let r = 0; r < totalRows; r += 3) {
             const top = r + 1;
+            const bottom = r + 3;
             const barcodeRow = r + 3;
             const leftCol = 1;
             const rightCol = 2;
@@ -96,29 +97,30 @@ export function useLabels() {
             for (let rr = top; rr <= barcodeRow; rr++) {
               for (let cc = leftCol; cc <= rightCol; cc++) {
                 const cell = ws.getRow(rr).getCell(cc);
+                const lineStyle: ExcelJS.BorderStyle = "dotted";
+                const lineColor = { argb: "FF777777" };
 
                 const border = cell.border || {};
+                // Верхняя граница блока
                 if (rr === top) {
-                  border.top = { style: "dotted", color: { argb: "FF999999" } };
+                  border.top = { style: lineStyle, color: lineColor };
                 }
-                if (rr === barcodeRow) {
-                  border.bottom = {
-                    style: "dotted",
-                    color: { argb: "FF999999" },
-                  };
+
+                // Нижняя граница блока
+                if (rr === bottom) {
+                  border.bottom = { style: lineStyle, color: lineColor };
                 }
+
+                // Левая граница блока
                 if (cc === leftCol) {
-                  border.left = {
-                    style: "dotted",
-                    color: { argb: "FF999999" },
-                  };
+                  border.left = { style: lineStyle, color: lineColor };
                 }
+
+                // Правая граница блока
                 if (cc === rightCol) {
-                  border.right = {
-                    style: "dotted",
-                    color: { argb: "FF999999" },
-                  };
+                  border.right = { style: lineStyle, color: lineColor };
                 }
+
                 cell.border = border;
 
                 if (rr === barcodeRow) {
