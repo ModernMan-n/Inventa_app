@@ -35,7 +35,13 @@ export default function Register({ onClose }: { onClose: () => void }) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              style={{ width: "100%", padding: 8, marginTop: 6 }}
+              style={{
+                width: "100%",
+                padding: 8,
+                marginTop: 6,
+                borderRadius: 99,
+                borderColor: "#1a6dff",
+              }}
             />
           </label>
 
@@ -46,7 +52,13 @@ export default function Register({ onClose }: { onClose: () => void }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={{ width: "100%", padding: 8, marginTop: 6 }}
+              style={{
+                width: "100%",
+                padding: 8,
+                marginTop: 6,
+                borderRadius: 99,
+                borderColor: "#1a6dff",
+              }}
             />
           </label>
 
@@ -57,7 +69,13 @@ export default function Register({ onClose }: { onClose: () => void }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={{ width: "100%", padding: 8, marginTop: 6 }}
+              style={{
+                width: "100%",
+                padding: 8,
+                marginTop: 6,
+                borderRadius: 99,
+                borderColor: "#1a6dff",
+              }}
             />
           </label>
 
@@ -68,7 +86,13 @@ export default function Register({ onClose }: { onClose: () => void }) {
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               required
-              style={{ width: "100%", padding: 8, marginTop: 6 }}
+              style={{
+                width: "100%",
+                padding: 8,
+                marginTop: 6,
+                borderRadius: 99,
+                borderColor: "#1a6dff",
+              }}
             />
           </label>
 

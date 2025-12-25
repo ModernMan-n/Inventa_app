@@ -253,6 +253,7 @@ html,
   align-items: center;
   justify-content: center;
   z-index: 50;
+  opacity: 1;
 }
 .modal-btn {
   margin: 10px auto;
@@ -268,6 +269,71 @@ html,
   max-width: 600px;
   width: 100%;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
+}
+
+/* Animations for modal appearance/exit (use .enter / .exit classes) */
+.modal-backdrop.enter {
+  opacity: 0;
+  animation: backdrop-fade-in 220ms ease-out forwards;
+}
+.modal-backdrop.exit {
+  opacity: 1;
+  animation: backdrop-fade-out 200ms ease-out forwards;
+}
+
+.modal.enter {
+  transform: translateY(10px) scale(0.995);
+  opacity: 0;
+  animation: modal-pop-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.modal.exit {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  animation: modal-pop-out 220ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes backdrop-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-pop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.005);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes backdrop-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-pop-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
 }
 
 .modal-title {
@@ -312,6 +378,7 @@ html,
 .btn img {
   width: 16px;
   height: 16px;
+  color: #1a6dff;
 }
 .custom-size input {
   width: 80px;

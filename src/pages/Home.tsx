@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Landing.css";
 
-import "./Home.css";
 import Header from "../components/Header";
 
 export default function Home() {
@@ -26,7 +25,7 @@ export default function Home() {
     <div className="landing-root">
       <Header />
 
-      <main className="landing-hero">
+      <main className="landing-hero ">
         <div className="hero-content">
           <h1 className="hero-title">Инвента</h1>
           <p className="hero-sub">

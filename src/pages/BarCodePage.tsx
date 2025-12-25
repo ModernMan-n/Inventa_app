@@ -2,6 +2,7 @@ import "./BarCodePage.css";
 import CustomSelect from "../components/CustomSelect";
 import Header from "../components/Header";
 import { useLabels } from "../hooks/useLabels";
+import Modal from "../components/Modal";
 
 // ===================== ОСНОВНОЙ КОМПОНЕНТ (копия App.tsx) =====================
 
@@ -77,80 +78,75 @@ function AppPage() {
         </section>
       </main>
 
-      {/* Попап сопоставления колонок */}
-      {isMappingModalOpen && (
-        <div
-          className="modal-backdrop"
-          onClick={() => setIsMappingModalOpen(false)}
-        >
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2 className="modal-title">Сопоставление колонок</h2>
-            <p className="modal-text">
-              Выберите, какие столбцы в вашей таблице соответствуют обязательным
-              полям. Без этого мы не сможем правильно сформировать этикетки.
-            </p>
+      <Modal
+        open={isMappingModalOpen}
+        onClose={() => setIsMappingModalOpen(false)}
+      >
+        <h2 className="modal-title">Сопоставление колонок</h2>
+        <p className="modal-text">
+          Выберите, какие столбцы в вашей таблице соответствуют обязательным
+          полям. Без этого мы не сможем правильно сформировать этикетки.
+        </p>
 
-            <div className="mapping-grid">
-              <label className="mappingField">
-                <span>Инвентарный номер *</span>
-                <CustomSelect
-                  label="Инвентарный номер *"
-                  value={mappingDraft.inventory}
-                  options={availableColumns}
-                  onChange={(v) =>
-                    setMappingDraft((prev) => ({ ...prev, inventory: v }))
-                  }
-                />
-              </label>
+        <div className="mapping-grid">
+          <label className="mappingField">
+            <span>Инвентарный номер *</span>
+            <CustomSelect
+              label="Инвентарный номер *"
+              value={mappingDraft.inventory}
+              options={availableColumns}
+              onChange={(v) =>
+                setMappingDraft((prev) => ({ ...prev, inventory: v }))
+              }
+            />
+          </label>
 
-              <label className="mappingField">
-                <span>Наименование ОС *</span>
-                <CustomSelect
-                  label="Наименование ОС *"
-                  value={mappingDraft.name}
-                  options={availableColumns}
-                  onChange={(v) =>
-                    setMappingDraft((prev) => ({ ...prev, name: v }))
-                  }
-                />
-              </label>
+          <label className="mappingField">
+            <span>Наименование ОС *</span>
+            <CustomSelect
+              label="Наименование ОС *"
+              value={mappingDraft.name}
+              options={availableColumns}
+              onChange={(v) =>
+                setMappingDraft((prev) => ({ ...prev, name: v }))
+              }
+            />
+          </label>
 
-              <label className="mappingField">
-                <span>Номер позиции (№) *</span>
-                <CustomSelect
-                  label="Номер позиции *"
-                  value={mappingDraft.position}
-                  options={availableColumns}
-                  onChange={(v) =>
-                    setMappingDraft((prev) => ({ ...prev, position: v }))
-                  }
-                />
-              </label>
-            </div>
-
-            <div className="modal-actions">
-              <button
-                className="btn secondary modal-btn"
-                onClick={() => setIsMappingModalOpen(false)}
-              >
-                Отмена
-              </button>
-              <button
-                className="btn primary modal-btn"
-                onClick={handleConfirmMapping}
-                disabled={
-                  !rowsBuffer ||
-                  !mappingDraft.name ||
-                  !mappingDraft.inventory ||
-                  !mappingDraft.position
-                }
-              >
-                Продолжить
-              </button>
-            </div>
-          </div>
+          <label className="mappingField">
+            <span>Номер позиции (№) *</span>
+            <CustomSelect
+              label="Номер позиции *"
+              value={mappingDraft.position}
+              options={availableColumns}
+              onChange={(v) =>
+                setMappingDraft((prev) => ({ ...prev, position: v }))
+              }
+            />
+          </label>
         </div>
-      )}
+
+        <div className="modal-actions">
+          <button
+            className="btn secondary modal-btn"
+            onClick={() => setIsMappingModalOpen(false)}
+          >
+            Отмена
+          </button>
+          <button
+            className="btn primary modal-btn"
+            onClick={handleConfirmMapping}
+            disabled={
+              !rowsBuffer ||
+              !mappingDraft.name ||
+              !mappingDraft.inventory ||
+              !mappingDraft.position
+            }
+          >
+            Продолжить
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
