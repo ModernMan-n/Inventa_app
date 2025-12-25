@@ -2,10 +2,14 @@ import { useState } from "react";
 import "./App.css";
 import CustomSelect from "./components/CustomSelect";
 import { useLabels } from "./hooks/useLabels";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 // ===================== ОСНОВНОЙ КОМПОНЕНТ =====================
 
 function App() {
   const [isFontModalOpen, setIsFontModalOpen] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   // ===================== JSX =====================
   const {
     state: {
@@ -43,7 +47,18 @@ function App() {
             Контакты
           </a>
         </nav>
-        <button className="header-cta">Связаться</button>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <button className="link-btn" onClick={() => setShowLogin(true)}>
+            Войти
+          </button>
+          <button
+            className="btn secondary"
+            onClick={() => setShowRegister(true)}
+          >
+            Регистрация
+          </button>
+          <button className="header-cta">Связаться</button>
+        </div>
       </header>
 
       <main className="hero">
@@ -199,6 +214,19 @@ function App() {
               Понятно
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Страницы авторизации */}
+      {showLogin && (
+        <div className="modal-backdrop" onClick={() => setShowLogin(false)}>
+          <Login onClose={() => setShowLogin(false)} />
+        </div>
+      )}
+
+      {showRegister && (
+        <div className="modal-backdrop" onClick={() => setShowRegister(false)}>
+          <Register onClose={() => setShowRegister(false)} />
         </div>
       )}
     </div>
