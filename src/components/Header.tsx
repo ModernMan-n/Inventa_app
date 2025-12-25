@@ -6,7 +6,6 @@ import Register from "../pages/Register";
 import Modal from "./Modal";
 
 export default function Menu() {
-  const [isFontModalOpen, setIsFontModalOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [openMobile, setOpenMobile] = useState(false);
