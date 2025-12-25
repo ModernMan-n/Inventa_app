@@ -9,7 +9,6 @@ import Modal from "./components/Modal";
 // ===================== ОСНОВНОЙ КОМПОНЕНТ =====================
 
 function App() {
-  const [isFontModalOpen, setIsFontModalOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   // ===================== JSX =====================
