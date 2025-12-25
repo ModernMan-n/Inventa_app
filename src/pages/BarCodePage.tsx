@@ -1,16 +1,11 @@
-import { useState } from "react";
-import "./App.css";
-import CustomSelect from "./components/CustomSelect";
-import Header from "./components/Header";
-import { useLabels } from "./hooks/useLabels";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-// ===================== ОСНОВНОЙ КОМПОНЕНТ =====================
+import "./BarCodePage.css";
+import CustomSelect from "../components/CustomSelect";
+import Header from "../components/Header";
+import { useLabels } from "../hooks/useLabels";
 
-function App() {
-  const [isFontModalOpen, setIsFontModalOpen] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);
+// ===================== ОСНОВНОЙ КОМПОНЕНТ (копия App.tsx) =====================
+
+function AppPage() {
   // ===================== JSX =====================
   const {
     state: {
@@ -33,7 +28,6 @@ function App() {
   return (
     <div className="app-root">
       <Header />
-
       <main className="hero">
         <section className="hero-content">
           <div className="hero-text">
@@ -157,21 +151,8 @@ function App() {
           </div>
         </div>
       )}
-
-      {/* Страницы авторизации */}
-      {showLogin && (
-        <div className="modal-backdrop" onClick={() => setShowLogin(false)}>
-          <Login onClose={() => setShowLogin(false)} />
-        </div>
-      )}
-
-      {showRegister && (
-        <div className="modal-backdrop" onClick={() => setShowRegister(false)}>
-          <Register onClose={() => setShowRegister(false)} />
-        </div>
-      )}
     </div>
   );
 }
 
-export default App;
+export default AppPage;

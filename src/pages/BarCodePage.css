@@ -114,7 +114,8 @@ html,
 .hero-buttons {
   display: flex;
   gap: 12px;
-  margin-bottom: 12px;
+  margin: 12px auto;
+  justify-content: center;
 }
 
 .btn {

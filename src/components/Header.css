@@ -1,0 +1,22 @@
+.nav {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #647095;
+}
+
+.nav-link.active {
+  color: #1a6dff;
+  font-weight: 600;
+}
+.menu-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: auto;
+  gap: 5rem;
+}

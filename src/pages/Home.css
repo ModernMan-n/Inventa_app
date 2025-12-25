@@ -23,7 +23,12 @@ html,
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: radial-gradient(
+    circle at top left,
+    #e0ecff 0,
+    #f6f8ff 45%,
+    #ffffff 100%
+  );
 }
 
 /* HEADER */
@@ -327,4 +332,67 @@ html,
 }
 .mappingField > span {
   width: 50%;
+}
+.offer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.greeting-section {
+  text-align: center;
+  min-height: 30vh;
+  max-height: 80vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.animated-background {
+  background-size: 300% 300%;
+  background-image: linear-gradient(
+    -45deg,
+    #699ffd 0%,
+    #699ffd 25%,
+    #1a6dff 51%,
+    #fff 100%
+  );
+  -webkit-animation: AnimateBG 20s ease infinite;
+  animation: AnimateBG 20s ease infinite;
+}
+
+@-webkit-keyframes AnimateBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes AnimateBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.greeting-text {
+  margin: auto;
+  font-size: 24px;
+  font-weight: 600;
+}
+.greeting-text b {
+  color: #fff;
+}
+.about-section {
+  min-height: 30vh;
+  max-height: 80vh;
+  background: linear-gradient(135deg, #1a6dff, #5b9dff);
 }

@@ -11,9 +11,10 @@
   "dependencies": {
     "exceljs": "^4.4.0",
     "jsbarcode": "^3.11.6",
-    "xlsx": "^0.18.5",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "^18.3.5",
