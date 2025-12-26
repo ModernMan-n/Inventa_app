@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: inventa
+      POSTGRES_PASSWORD: inventa_pass
+      POSTGRES_DB: inventa_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://inventa:inventa_pass@db:5432/inventa_db?schema=public
+    ports:
+      - "4000:4000"
+
+volumes:
+  db-data:
