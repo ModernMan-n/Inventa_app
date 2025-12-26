@@ -57,6 +57,14 @@ export default function Menu() {
           >
             Генерация Штрихкода
           </NavLink>
+          <NavLink
+            to="/admin"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Админ
+          </NavLink>
           <div className="common-btn">
             <button
               className="btn secondary blue"
