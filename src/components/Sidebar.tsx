@@ -41,7 +41,7 @@ export default function Sidebar({ className }: { className?: string }) {
         <NavLink
           to="/app"
           className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
+            isActive ? "side-link active" : "side-link"
           }
         >
           Генерация Штрихкода

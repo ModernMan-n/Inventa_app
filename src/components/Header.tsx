@@ -45,7 +45,8 @@ export default function Menu() {
         </a>
       </div>
       {location.pathname.startsWith("/dashboard") ||
-      location.pathname.startsWith("/admin") ? null : (
+      location.pathname.startsWith("/admin") ||
+      location.pathname.startsWith("/app") ? null : (
         <div className="menu-container" ref={menuRef}>
           <button
             className="menu-toggle"

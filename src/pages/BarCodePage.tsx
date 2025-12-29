@@ -3,6 +3,7 @@ import CustomSelect from "../components/CustomSelect";
 import Header from "../components/Header";
 import { useLabels } from "../hooks/useLabels";
 import Modal from "../components/Modal";
+import Sidebar from "../components/Sidebar";
 
 // ===================== ОСНОВНОЙ КОМПОНЕНТ (копия App.tsx) =====================
 
@@ -29,54 +30,57 @@ function AppPage() {
   return (
     <div className="app-root">
       <Header />
-      <main className="hero">
-        <section className="hero-content">
-          <div className="hero-text">
-            <p className="eyebrow">ИНВЕНТАРИЗАЦИЯ БЕЗ БОЛИ</p>
-            <h1 className="hero-title">Генератор этикеток</h1>
-            <p className="hero-subtitle">
-              Загрузите Excel с объектами — получите готовый файл с этикетками и
-              штрих-кодами. Печатаете, клеите, сканируете — инвентарный номер
-              вводится автоматически.
-            </p>
-
-            <div className="hero-buttons">
-              <button
-                className="btn primary"
-                onClick={onUploadClick}
-                disabled={isProcessing}
-              >
-                {isProcessing ? "Обработка..." : "Загрузить файл"}
-              </button>
-
-              <button
-                className="btn secondary"
-                onClick={onDownloadClick}
-                disabled={!downloadUrl}
-              >
-                Скачать файл
-              </button>
-            </div>
-
-            <p className="status-text">{status}</p>
-          </div>
-
-          <div className="hero-visual">
-            <div className="hero-card">
-              <p className="hero-card-title">Превью этикетки</p>
-              <div className="label-preview">
-                <div className="label-line">Основное средство</div>
-                <div className="label-line label-inv">инв. №410134001558</div>
-                <div className="label-barcode">▌▌▍▍▌▍▌▌▍▌▍▍▌▌▍</div>
-              </div>
-              <p className="hero-card-caption">
-                Штрих-код содержит инвентарный номер и считывается любым
-                сканером.
+      <div className="dashboard-layout">
+        <Sidebar />
+        <main className="hero">
+          <section className="hero-content">
+            <div className="hero-text">
+              <p className="eyebrow">ИНВЕНТАРИЗАЦИЯ БЕЗ БОЛИ</p>
+              <h1 className="hero-title">Генератор этикеток</h1>
+              <p className="hero-subtitle">
+                Загрузите Excel с объектами — получите готовый файл с этикетками
+                и штрих-кодами. Печатаете, клеите, сканируете — инвентарный
+                номер вводится автоматически.
               </p>
+
+              <div className="hero-buttons">
+                <button
+                  className="btn primary"
+                  onClick={onUploadClick}
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? "Обработка..." : "Загрузить файл"}
+                </button>
+
+                <button
+                  className="btn secondary"
+                  onClick={onDownloadClick}
+                  disabled={!downloadUrl}
+                >
+                  Скачать файл
+                </button>
+              </div>
+
+              <p className="status-text">{status}</p>
             </div>
-          </div>
-        </section>
-      </main>
+
+            <div className="hero-visual">
+              <div className="hero-card">
+                <p className="hero-card-title">Превью этикетки</p>
+                <div className="label-preview">
+                  <div className="label-line">Основное средство</div>
+                  <div className="label-line label-inv">инв. №410134001558</div>
+                  <div className="label-barcode">▌▌▍▍▌▍▌▌▍▌▍▍▌▌▍</div>
+                </div>
+                <p className="hero-card-caption">
+                  Штрих-код содержит инвентарный номер и считывается любым
+                  сканером.
+                </p>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
 
       <Modal
         open={isMappingModalOpen}
