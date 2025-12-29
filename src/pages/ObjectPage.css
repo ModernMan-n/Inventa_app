@@ -1,0 +1,42 @@
+.object-page {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.object-card {
+  max-width: 720px;
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(20, 30, 50, 0.06);
+}
+
+.object-title {
+  margin: 0 0 12px 0;
+}
+
+.object-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.object-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.object-note {
+  margin-top: 12px;
+  color: #666;
+  font-size: 13px;
+}
+
+.btn.danger {
+  background: #e74c3c;
+  color: #fff;
+}

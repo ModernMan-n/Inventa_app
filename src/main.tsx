@@ -8,6 +8,7 @@ import Admin from "./pages/Admin";
 import Dashboard from "./pages/Dashboard";
 import Documents from "./pages/Documents";
 import DocumentsTable from "./pages/DocumentsTable";
+import ObjectPage from "./pages/ObjectPage";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -19,6 +20,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/docs" element={<Documents />} />
         <Route path="/dashboard/docs/:table" element={<DocumentsTable />} />
+        <Route path="/object/:id" element={<ObjectPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
