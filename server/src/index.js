@@ -181,3 +181,42 @@ app.delete("/api/models/:name/rows/:id", async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+
+// Schema for dynamic tables: columns list
+app.get("/api/schema/:table", async (req, res) => {
+  try {
+    const name = req.params.table;
+    if (!validName(name)) return res.status(400).json({ error: "invalid" });
+    const table = `dyn_${name}`;
+    const rows = await prisma.$queryRawUnsafe(
+      `SELECT column_name, data_type FROM information_schema.columns WHERE table_name = $1 ORDER BY ordinal_position`,
+      table
+    );
+    if (!rows || rows.length === 0)
+      return res.status(404).json({ error: "not found" });
+    const columns = rows.map((r) => ({
+      name: r.column_name,
+      type: r.data_type,
+    }));
+    res.json({ columns });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Data for dynamic tables
+app.get("/api/data/:table", async (req, res) => {
+  try {
+    const name = req.params.table;
+    if (!validName(name)) return res.status(400).json({ error: "invalid" });
+    const table = `dyn_${name}`;
+    const rows = await prisma.$queryRawUnsafe(
+      `SELECT * FROM "${table}" ORDER BY id DESC LIMIT 1000`
+    );
+    res.json({ rows });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: e.message });
+  }
+});

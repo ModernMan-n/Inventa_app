@@ -380,6 +380,9 @@ html,
   height: 16px;
   color: #1a6dff;
 }
+.app-header {
+  border-bottom: 2px solid #1a6dff;
+}
 .custom-size input {
   width: 80px;
   padding: 4px 6px;

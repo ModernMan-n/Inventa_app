@@ -1,65 +1,47 @@
 import { useState } from "react";
+import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import ModelList from "../components/ModelList";
 import ModelForm from "../components/ModelForm";
+import ModelCreator from "../components/ModelCreator";
 import "./Admin.css";
+import "./Dashboard.css";
 
 type ModelName = "User" | "Label";
 
 export default function Admin() {
   const [model, setModel] = useState<ModelName>("Label");
+  const rawUser =
+    typeof window !== "undefined" ? localStorage.getItem("user") : null;
+  const user = rawUser ? JSON.parse(rawUser) : null;
 
-  function ModelCreator() {
-    const [name, setName] = useState("");
-    const [cols, setCols] = useState("title:text,inventoryNo:text");
-    const [status, setStatus] = useState<string | null>(null);
-
-    async function create(e: any) {
-      e.preventDefault();
-      setStatus(null);
-      try {
-        const columns = cols.split(",").map((p) => {
-          const [n, t] = p.split(":").map((s) => s.trim());
-          return { name: n, type: t || "text" };
-        });
-        const res = await fetch("/api/models", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, columns }),
-        });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.error || JSON.stringify(json));
-        setStatus("Created " + json.table);
-        setName("");
-        // reload models list UI
-        setTimeout(() => location.reload(), 400);
-      } catch (err: any) {
-        setStatus(String(err.message || err));
-      }
-    }
-
+  if (!user) {
     return (
-      <form onSubmit={create} className="paper-setup">
-        <label>Имя модели (без префикса)</label>
-        <input value={name} onChange={(e) => setName(e.target.value)} />
-        <label>Колонки (пример: title:text,inventoryNo:text)</label>
-        <input value={cols} onChange={(e) => setCols(e.target.value)} />
-        <div style={{ marginTop: 8 }}>
-          <button type="submit" className="btn primary">
-            Создать таблицу
-          </button>
-        </div>
-        {status && <div style={{ marginTop: 8 }}>{status}</div>}
-      </form>
+      <div className="app-root">
+        <Header />
+        <main className="hero">
+          <section className="hero-content">
+            <div className="hero-text">
+              <h1>Вы не авторизованы</h1>
+              <p>
+                Доступ к этой странице возможен только для авторизованных
+                пользователей.
+              </p>
+            </div>
+          </section>
+        </main>
+      </div>
     );
   }
 
   return (
-    <div className="app-root">
+    <div className="dashboard-root">
       <Header />
 
-      <main className="hero">
-        <section className="hero-content">
+      <div className="dashboard-layout">
+        <Sidebar />
+
+        <main className="dashboard-main">
           <div className="hero-text">
             <p className="eyebrow">Панель администратора</p>
             <h1 className="hero-title">Управление данными</h1>
@@ -96,15 +78,8 @@ export default function Admin() {
               </div>
             </div>
           </div>
-
-          <div className="hero-visual">
-            <div className="hero-card">
-              <p className="hero-card-title">Список {model}</p>
-              <ModelList model={model} />
-            </div>
-          </div>
-        </section>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

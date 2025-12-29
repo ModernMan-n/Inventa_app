@@ -1,9 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Login({ onClose }: { onClose: () => void }) {
+export default function Login({
+  onClose,
+  onLogin,
+}: {
+  onClose: () => void;
+  onLogin?: (user: { username: string } | null) => void;
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -12,9 +20,17 @@ export default function Login({ onClose }: { onClose: () => void }) {
       setError("Пожалуйста, заполните все поля");
       return;
     }
-    // TODO: подключить реальный бэкенд
-    alert(`Вход: ${email}`);
-    onClose();
+    // Простейшая локальная аутентификация для демо
+    if (email === "admin" && password === "admin") {
+      const user = { username: "admin" };
+      localStorage.setItem("user", JSON.stringify(user));
+      onLogin && onLogin(user);
+      onClose();
+      // Перенаправляем на дэшборд
+      navigate("/dashboard");
+      return;
+    }
+    setError("Неверный логин или пароль");
   };
 
   return (
@@ -23,9 +39,9 @@ export default function Login({ onClose }: { onClose: () => void }) {
       <form onSubmit={handleSubmit}>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <label>
-            Эл. почта
+            Логин
             <input
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

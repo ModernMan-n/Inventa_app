@@ -297,6 +297,20 @@ html,
   gap: 10px;
 }
 
+.model-creator input,
+.model-creator select {
+  border: 1px solid #e6e9f2;
+  border-radius: 8px;
+}
+
+.model-creator .btn.secondary {
+  padding: 8px 10px;
+}
+
+.model-creator .btn.primary {
+  padding: 10px 14px;
+}
+
 .paper-setup select {
   padding: 6px 10px;
   font-size: 14px;
