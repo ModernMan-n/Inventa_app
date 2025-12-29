@@ -1,11 +1,8 @@
-import { useState } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import "./Dashboard.css";
 
 export default function Dashboard() {
-  const [collapsed, setCollapsed] = useState(false);
-
   return (
     <div className="dashboard-root">
       <Header />

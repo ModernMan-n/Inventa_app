@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import ModelList from "../components/ModelList";
 import ModelForm from "../components/ModelForm";
 import ModelCreator from "../components/ModelCreator";
 import "./Admin.css";
