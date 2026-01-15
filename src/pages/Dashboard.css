@@ -65,7 +65,7 @@
 }
 
 .quick-forms {
-  display: flex;
+  display: grid;
   gap: 16px;
   margin-top: 16px;
 }
@@ -151,4 +151,10 @@
 }
 .hero-data-table {
   width: 100%;
+}
+.form-card form input {
+  border-radius: 99px;
+  border: 2px solid #1a6dff;
+  margin-right: 10px;
+  padding: 5px;
 }

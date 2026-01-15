@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { authFetch } from "../utils/auth";
 
 export default function ModelList({ model }: { model: string }) {
   const [items, setItems] = useState<any[]>([]);
@@ -7,7 +8,8 @@ export default function ModelList({ model }: { model: string }) {
     async function load() {
       try {
         if (model === "Label") {
-          const res = await fetch("/api/labels");
+          const res = await authFetch("/api/labels");
+          if (!res.ok) throw new Error("Failed to load labels");
           const data = await res.json();
           setItems(data);
         } else if (model === "User") {
@@ -23,7 +25,11 @@ export default function ModelList({ model }: { model: string }) {
 
   async function handleDelete(id: number) {
     if (!confirm("Delete?")) return;
-    await fetch(`/api/labels/${id}`, { method: "DELETE" });
+    const res = await authFetch(`/api/labels/${id}`, { method: "DELETE" });
+    if (!res.ok) {
+      alert("Ошибка удаления");
+      return;
+    }
     setItems((s) => s.filter((i) => i.id !== id));
   }
 

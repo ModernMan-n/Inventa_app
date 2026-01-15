@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import DataTable from "../components/DataTable";
 import "./Dashboard.css";
+import { authFetch } from "../utils/auth";
 
 export default function DocumentsTable() {
   const { table } = useParams<{ table: string }>();
@@ -17,7 +18,7 @@ export default function DocumentsTable() {
     setLoading(true);
     async function load() {
       try {
-        const sres = await fetch(`/api/schema/${t}`);
+        const sres = await authFetch(`/api/schema/${t}`);
         if (sres.ok) {
           const schema = await sres.json();
           if (!mounted) return;
@@ -39,7 +40,7 @@ export default function DocumentsTable() {
           else setCols([{ name: "id" }, { name: "title" }]);
         }
 
-        const dres = await fetch(`/api/data/${t}`);
+        const dres = await authFetch(`/api/data/${t}`);
         if (dres.ok) {
           const data = await dres.json();
           if (!mounted) return;

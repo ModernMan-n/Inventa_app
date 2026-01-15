@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { authFetch } from "../utils/auth";
 
 export default function ModelCreator() {
   const [name, setName] = useState("");
@@ -35,7 +36,7 @@ export default function ModelCreator() {
       if (payloadCols.length === 0)
         throw new Error("Добавьте хотя бы одну колонку");
 
-      const res = await fetch("/api/models", {
+      const res = await authFetch("/api/models", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: name.trim(), columns: payloadCols }),

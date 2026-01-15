@@ -343,3 +343,9 @@ html,
 .mappingField > span {
   width: 50%;
 }
+.paper-setup div input {
+  border-radius: 99px;
+  border: 2px solid #1a6dff;
+  margin-right: 10px;
+  padding: 5px;
+}

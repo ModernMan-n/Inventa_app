@@ -1,18 +1,54 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import ModelForm from "../components/ModelForm";
 import ModelCreator from "../components/ModelCreator";
 import "./Admin.css";
 import "./Dashboard.css";
+import { fetchMe, getStoredUser, getToken, type AuthUser } from "../utils/auth";
 
 type ModelName = "User" | "Label";
 
 export default function Admin() {
   const [model, setModel] = useState<ModelName>("Label");
-  const rawUser =
-    typeof window !== "undefined" ? localStorage.getItem("user") : null;
-  const user = rawUser ? JSON.parse(rawUser) : null;
+  const [user, setUser] = useState<AuthUser | null>(() => getStoredUser());
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    const token = getToken();
+    if (!token) {
+      setChecking(false);
+      return;
+    }
+    fetchMe(token)
+      .then((u) => {
+        if (!mounted) return;
+        setUser(u);
+        setChecking(false);
+      })
+      .catch(() => {
+        if (mounted) setChecking(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (checking) {
+    return (
+      <div className="app-root">
+        <Header />
+        <main className="hero">
+          <section className="hero-content">
+            <div className="hero-text">
+              <h1>Проверка доступа...</h1>
+            </div>
+          </section>
+        </main>
+      </div>
+    );
+  }
 
   if (!user) {
     return (

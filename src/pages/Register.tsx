@@ -1,13 +1,21 @@
 import { useState } from "react";
+import { registerUser, type AuthUser } from "../utils/auth";
 
-export default function Register({ onClose }: { onClose: () => void }) {
+export default function Register({
+  onClose,
+  onLogin,
+}: {
+  onClose: () => void;
+  onLogin?: (user: AuthUser | null) => void;
+}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     if (!name || !email || !password || !confirm) {
@@ -18,9 +26,23 @@ export default function Register({ onClose }: { onClose: () => void }) {
       setError("Пароли не совпадают");
       return;
     }
-    // TODO: регистрация через API
-    alert(`Регистрация: ${name} <${email}>`);
-    onClose();
+    setLoading(true);
+    try {
+      const user = await registerUser({ name, email, password });
+      onLogin && onLogin(user);
+      onClose();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes("user exists")) {
+        setError("Пользователь уже существует");
+      } else if (msg.includes("email+password")) {
+        setError("Пожалуйста, заполните все поля");
+      } else {
+        setError("Ошибка регистрации");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -104,8 +126,8 @@ export default function Register({ onClose }: { onClose: () => void }) {
             <button type="button" className="btn secondary" onClick={onClose}>
               Отмена
             </button>
-            <button type="submit" className="btn primary">
-              Зарегистрироваться
+            <button type="submit" className="btn primary" disabled={loading}>
+              {loading ? "Регистрация..." : "Зарегистрироваться"}
             </button>
           </div>
         </div>

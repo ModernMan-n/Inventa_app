@@ -1,4 +1,14 @@
 import { useState } from "react";
+import { authFetch } from "../utils/auth";
+
+async function readError(res: Response) {
+  try {
+    const data = (await res.json()) as { error?: string; message?: string };
+    return data.error || data.message || res.statusText;
+  } catch (e) {
+    return res.statusText;
+  }
+}
 
 export default function ModelForm({
   model,
@@ -25,7 +35,7 @@ export default function ModelForm({
     e.preventDefault();
     try {
       if (model === "Label") {
-        await fetch("/api/labels", {
+        const res = await authFetch("/api/labels", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -34,8 +44,9 @@ export default function ModelForm({
             barcodeBase64: form.barcodeBase64 || null,
           }),
         });
+        if (!res.ok) throw new Error(await readError(res));
       } else if (model === "User") {
-        await fetch("/api/register", {
+        const res = await fetch("/api/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -44,6 +55,7 @@ export default function ModelForm({
             name: form.name,
           }),
         });
+        if (!res.ok) throw new Error(await readError(res));
       }
       setForm({});
       onCreated?.();

@@ -10,6 +10,19 @@ app.use(express.json());
 
 const JWT_SECRET = process.env.JWT_SECRET || "devsecret";
 
+function requireAuth(req, res, next) {
+  const auth = req.headers.authorization || "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  if (!token) return res.status(401).json({ error: "unauthorized" });
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    req.user = payload;
+    return next();
+  } catch (e) {
+    return res.status(401).json({ error: "invalid token" });
+  }
+}
+
 app.get("/health", (req, res) => res.json({ ok: true }));
 
 app.post("/api/register", async (req, res) => {
@@ -51,14 +64,14 @@ app.get("/api/me", async (req, res) => {
 });
 
 // Labels endpoints (simple CRUD)
-app.get("/api/labels", async (req, res) => {
+app.get("/api/labels", requireAuth, async (req, res) => {
   const labels = await prisma.label.findMany({
     orderBy: { createdAt: "desc" },
   });
   res.json(labels);
 });
 
-app.post("/api/labels", async (req, res) => {
+app.post("/api/labels", requireAuth, async (req, res) => {
   const { title, inventoryNo, barcodeBase64 } = req.body;
   if (!title || !inventoryNo)
     return res.status(400).json({ error: "title+inventoryNo required" });
@@ -68,7 +81,7 @@ app.post("/api/labels", async (req, res) => {
   res.json(label);
 });
 
-app.delete("/api/labels/:id", async (req, res) => {
+app.delete("/api/labels/:id", requireAuth, async (req, res) => {
   const id = Number(req.params.id);
   await prisma.label.delete({ where: { id } });
   res.json({ ok: true });
@@ -82,7 +95,7 @@ function validName(n) {
   return /^[a-zA-Z][a-zA-Z0-9_]*$/.test(n);
 }
 
-app.post("/api/models", async (req, res) => {
+app.post("/api/models", requireAuth, async (req, res) => {
   // body: { name: 'inventory', columns: [{ name:'title', type:'text' }, ...] }
   try {
     const { name, columns } = req.body;
@@ -117,7 +130,7 @@ app.post("/api/models", async (req, res) => {
   }
 });
 
-app.get("/api/models", async (req, res) => {
+app.get("/api/models", requireAuth, async (req, res) => {
   try {
     const rows = await prisma.$queryRawUnsafe(
       "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_name LIKE 'dyn_%' ORDER BY table_name"
@@ -129,7 +142,7 @@ app.get("/api/models", async (req, res) => {
   }
 });
 
-app.get("/api/models/:name/rows", async (req, res) => {
+app.get("/api/models/:name/rows", requireAuth, async (req, res) => {
   try {
     const name = req.params.name;
     if (!validName(name))
@@ -145,7 +158,7 @@ app.get("/api/models/:name/rows", async (req, res) => {
   }
 });
 
-app.post("/api/models/:name/rows", async (req, res) => {
+app.post("/api/models/:name/rows", requireAuth, async (req, res) => {
   try {
     const name = req.params.name;
     if (!validName(name))
@@ -167,7 +180,7 @@ app.post("/api/models/:name/rows", async (req, res) => {
   }
 });
 
-app.delete("/api/models/:name/rows/:id", async (req, res) => {
+app.delete("/api/models/:name/rows/:id", requireAuth, async (req, res) => {
   try {
     const name = req.params.name;
     const id = Number(req.params.id);
@@ -183,7 +196,7 @@ app.delete("/api/models/:name/rows/:id", async (req, res) => {
 });
 
 // Schema for dynamic tables: columns list
-app.get("/api/schema/:table", async (req, res) => {
+app.get("/api/schema/:table", requireAuth, async (req, res) => {
   try {
     const name = req.params.table;
     if (!validName(name)) return res.status(400).json({ error: "invalid" });
@@ -206,7 +219,7 @@ app.get("/api/schema/:table", async (req, res) => {
 });
 
 // Data for dynamic tables
-app.get("/api/data/:table", async (req, res) => {
+app.get("/api/data/:table", requireAuth, async (req, res) => {
   try {
     const name = req.params.table;
     if (!validName(name)) return res.status(400).json({ error: "invalid" });

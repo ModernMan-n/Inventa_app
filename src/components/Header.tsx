@@ -4,11 +4,12 @@ import { useState, useRef, useEffect } from "react";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Modal from "./Modal";
+import { fetchMe, getStoredUser, getToken, clearSession } from "../utils/auth";
 
 export default function Menu() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [user, setUser] = useState<{ username: string } | null>(null);
+  const [user, setUser] = useState(() => getStoredUser());
   const [openMobile, setOpenMobile] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
@@ -27,14 +28,17 @@ export default function Menu() {
     return () => document.removeEventListener("click", handle);
   }, [openMobile]);
   useEffect(() => {
-    const raw = localStorage.getItem("user");
-    if (raw) {
-      try {
-        setUser(JSON.parse(raw));
-      } catch (e) {
-        setUser(null);
-      }
-    }
+    let mounted = true;
+    const token = getToken();
+    if (!token) return;
+    fetchMe(token)
+      .then((u) => {
+        if (mounted) setUser(u);
+      })
+      .catch(() => {});
+    return () => {
+      mounted = false;
+    };
   }, []);
   return (
     <header className="app-header">
@@ -95,12 +99,12 @@ export default function Menu() {
               ) : (
                 <>
                   <span style={{ marginRight: 8 }}>
-                    Привет, {user.username}
+                    Привет, {user.name || user.email}
                   </span>
                   <button
                     className="btn secondary"
                     onClick={() => {
-                      localStorage.removeItem("user");
+                      clearSession();
                       setUser(null);
                     }}
                   >
@@ -127,7 +131,13 @@ export default function Menu() {
       </Modal>
 
       <Modal open={showRegister} onClose={() => setShowRegister(false)}>
-        <Register onClose={() => setShowRegister(false)} />
+        <Register
+          onClose={() => setShowRegister(false)}
+          onLogin={(u) => {
+            setUser(u);
+            setShowRegister(false);
+          }}
+        />
       </Modal>
     </header>
   );

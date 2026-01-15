@@ -13,11 +13,8 @@ export default function Documents() {
 
         <main className="dashboard-main">
           <div className="hero-text">
-            <p className="eyebrow">Документы</p>
-            <h1 className="hero-title">Справочник страниц</h1>
-            <p className="hero-subtitle">
-              Секции с быстрым доступом к страницам.
-            </p>
+            <p className="eyebrow">Справочник страниц</p>
+            <h1 className="hero-title">Документы</h1>
 
             <section className="docs-section">
               <h2 className="section-title">Кадры</h2>

@@ -1,36 +1,45 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginUser, type AuthUser } from "../utils/auth";
 
 export default function Login({
   onClose,
   onLogin,
 }: {
   onClose: () => void;
-  onLogin?: (user: { username: string } | null) => void;
+  onLogin?: (user: AuthUser | null) => void;
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     if (!email || !password) {
       setError("Пожалуйста, заполните все поля");
       return;
     }
-    // Простейшая локальная аутентификация для демо
-    if (email === "admin" && password === "admin") {
-      const user = { username: "admin" };
-      localStorage.setItem("user", JSON.stringify(user));
+    setLoading(true);
+    try {
+      const user = await loginUser(email, password);
       onLogin && onLogin(user);
       onClose();
-      // Перенаправляем на дэшборд
       navigate("/dashboard");
-      return;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes("invalid")) {
+        setError("Неверный логин или пароль");
+      } else if (msg.includes("email+password")) {
+        setError("Пожалуйста, заполните все поля");
+      } else {
+        setError("Ошибка авторизации");
+      }
+    } finally {
+      setLoading(false);
     }
-    setError("Неверный логин или пароль");
   };
 
   return (
@@ -39,9 +48,9 @@ export default function Login({
       <form onSubmit={handleSubmit}>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <label>
-            Логин
+            Эл. почта
             <input
-              type="text"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -80,8 +89,8 @@ export default function Login({
             <button type="button" className="btn secondary" onClick={onClose}>
               Отмена
             </button>
-            <button type="submit" className="btn primary">
-              Войти
+            <button type="submit" className="btn primary" disabled={loading}>
+              {loading ? "Вход..." : "Войти"}
             </button>
           </div>
         </div>

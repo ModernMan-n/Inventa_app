@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./ObjectPage.css";
+import { fetchMe, getStoredUser, getToken, type AuthUser } from "../utils/auth";
 
 type Obj = {
   id: string;
@@ -26,19 +27,21 @@ function saveObjects(map: Record<string, Obj>) {
 export default function ObjectPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState<{ username: string } | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(() => getStoredUser());
   const [obj, setObj] = useState<Obj | null>(null);
 
   useEffect(() => {
-    const raw =
-      typeof window !== "undefined" ? localStorage.getItem("user") : null;
-    if (raw) {
-      try {
-        setUser(JSON.parse(raw));
-      } catch (e) {
-        setUser(null);
-      }
-    }
+    let mounted = true;
+    const token = getToken();
+    if (!token) return;
+    fetchMe(token)
+      .then((u) => {
+        if (mounted) setUser(u);
+      })
+      .catch(() => {});
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   useEffect(() => {

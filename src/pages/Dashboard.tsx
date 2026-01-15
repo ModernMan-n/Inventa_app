@@ -12,7 +12,6 @@ export default function Dashboard() {
 
         <main className="dashboard-main">
           <h1>Дэшборд</h1>
-          <p>Быстрые формы для создания документов и ключевой обзор.</p>
 
           <section className="quick-forms">
             <div className="form-card">
