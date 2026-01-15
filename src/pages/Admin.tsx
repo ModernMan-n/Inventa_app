@@ -1,18 +1,54 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import ModelForm from "../components/ModelForm";
 import ModelCreator from "../components/ModelCreator";
+import CustomSelect from "../components/CustomSelect";
 import "./Admin.css";
 import "./Dashboard.css";
-import { fetchMe, getStoredUser, getToken, type AuthUser } from "../utils/auth";
+import {
+  authFetch,
+  fetchMe,
+  getStoredUser,
+  getToken,
+  type AuthUser,
+} from "../utils/auth";
 
-type ModelName = "User" | "Label";
+const BASE_MODELS = ["Label", "User"];
 
 export default function Admin() {
-  const [model, setModel] = useState<ModelName>("Label");
+  const [model, setModel] = useState<string>("Label");
+  const [models, setModels] = useState<string[]>(BASE_MODELS);
+  const [modelsLoading, setModelsLoading] = useState(false);
+  const [modelsError, setModelsError] = useState<string | null>(null);
   const [user, setUser] = useState<AuthUser | null>(() => getStoredUser());
   const [checking, setChecking] = useState(true);
+  const refreshModels = useCallback(async (preferred?: string) => {
+    setModelsLoading(true);
+    setModelsError(null);
+    try {
+      const res = await authFetch("/api/models");
+      if (!res.ok) throw new Error("Не удалось загрузить список моделей");
+      const data = await res.json();
+      const raw = Array.isArray(data) ? data : [];
+      const dynamic = raw
+        .map((name) => String(name))
+        .filter((name) => name.startsWith("dyn_"))
+        .map((name) => name.slice(4))
+        .filter((name) => name.length > 0 && !BASE_MODELS.includes(name));
+      const next = [...new Set([...BASE_MODELS, ...dynamic])];
+      setModels(next);
+      setModel((current) => {
+        if (preferred && next.includes(preferred)) return preferred;
+        return next.includes(current) ? current : next[0];
+      });
+    } catch (err) {
+      setModels(BASE_MODELS);
+      setModelsError("Не удалось загрузить модели");
+    } finally {
+      setModelsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -34,6 +70,11 @@ export default function Admin() {
       mounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    refreshModels();
+  }, [user, refreshModels]);
 
   if (checking) {
     return (
@@ -85,19 +126,18 @@ export default function Admin() {
               модель слева.
             </p>
 
-            <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-              <button
-                className={`btn ${model === "Label" ? "primary" : "secondary"}`}
-                onClick={() => setModel("Label")}
-              >
-                Label
-              </button>
-              <button
-                className={`btn ${model === "User" ? "primary" : "secondary"}`}
-                onClick={() => setModel("User")}
-              >
-                User
-              </button>
+            <div className="admin-model-select">
+              <span className="admin-model-label">Модель</span>
+              <CustomSelect
+                label="Модель"
+                value={model}
+                options={models}
+                onChange={(v) => setModel(v)}
+              />
+              {modelsLoading && (
+                <div className="status-text">Загрузка моделей...</div>
+              )}
+              {modelsError && <div className="status-text">{modelsError}</div>}
             </div>
 
             <div style={{ marginTop: 18 }}>
@@ -109,7 +149,14 @@ export default function Admin() {
               />
               <div style={{ marginTop: 18 }}>
                 <h3 style={{ marginTop: 0 }}>Создать новую модель</h3>
-                <ModelCreator />
+                <ModelCreator
+                  onCreated={(tableName) => {
+                    const preferred = tableName.startsWith("dyn_")
+                      ? tableName.slice(4)
+                      : tableName;
+                    refreshModels(preferred);
+                  }}
+                />
               </div>
             </div>
           </div>

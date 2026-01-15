@@ -349,3 +349,42 @@ html,
   margin-right: 10px;
   padding: 5px;
 }
+
+.admin-model-select {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  max-width: 320px;
+}
+
+.admin-model-label {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 10px;
+  color: #8b93b5;
+}
+
+.admin-model-select .cs-wrapper {
+  max-width: 100%;
+  margin-bottom: 0;
+}
+
+.admin-model-select .cs-selected {
+  border-radius: 999px;
+  border-color: #d7e2ff;
+  box-shadow: 0 10px 22px rgba(26, 109, 255, 0.12);
+}
+
+.admin-model-select .cs-options {
+  border-radius: 16px;
+  border-color: #d7e2ff;
+}
+
+.admin-model-select .cs-option:hover {
+  background: #eef4ff;
+}
+
+.admin-model-select .cs-option.selected {
+  background: #dfeaff;
+}

@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { authFetch } from "../utils/auth";
 
-export default function ModelCreator() {
+export default function ModelCreator({
+  onCreated,
+}: {
+  onCreated?: (tableName: string) => void;
+}) {
   const [name, setName] = useState("");
   const [columns, setColumns] = useState<Array<{ name: string; type: string }>>(
     [
@@ -46,7 +50,7 @@ export default function ModelCreator() {
       setStatus("Создано: " + json.table);
       setName("");
       setColumns([{ name: "title", type: "text" }]);
-      setTimeout(() => location.reload(), 400);
+      onCreated?.(json.table);
     } catch (err: any) {
       setStatus(String(err.message || err));
     }
